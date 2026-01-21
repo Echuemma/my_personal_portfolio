@@ -447,7 +447,7 @@ article.active {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: hsla(240, 1%, 17%, .75);
+    background: var(--bg-gradient-jet);
     backdrop-filter: blur(10px);
     border: 1px solid var(--jet);
     border-radius: 12px 12px 0 0;
@@ -469,7 +469,7 @@ article.active {
 }
 
 .navbar-link {
-    color: var(--light-gray);
+    color: var(--white2);
     font-size: var(--fs8);
     padding: 20px 7px;
     transition: color var(--transition1);
@@ -487,7 +487,7 @@ article.active {
 .theme-toggle {
     background: none;
     border: none;
-    color: var(--light-gray);
+    color: var(--white2);
     cursor: pointer;
     font-size: 20px;
     padding: 10px;
