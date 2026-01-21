@@ -8,6 +8,8 @@ function Contact({ isActive }) {
   })
 
   const [isValid, setIsValid] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -19,13 +21,38 @@ function Contact({ isActive }) {
     setIsValid(isFormValid)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Add your form submission logic here
-    console.log('Form submitted:', formData)
-    // Reset form
-    setFormData({ fullname: '', email: '', message: '' })
-    setIsValid(false)
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          'form-name': 'contact',
+          fullname: formData.fullname,
+          email: formData.email,
+          message: formData.message
+        }).toString()
+      })
+
+      if (response.ok) {
+        setSubmitStatus('success')
+        setFormData({ fullname: '', email: '', message: '' })
+        setIsValid(false)
+        setTimeout(() => setSubmitStatus(null), 5000)
+      } else {
+        setSubmitStatus('error')
+        setTimeout(() => setSubmitStatus(null), 5000)
+      }
+    } catch (error) {
+      console.error('Form submission error:', error)
+      setSubmitStatus('error')
+      setTimeout(() => setSubmitStatus(null), 5000)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -52,7 +79,25 @@ function Contact({ isActive }) {
       <section className="contact-form" data-aos="fade-up" data-aos-delay="200">
         <h3 className="h3 form-title">Contact Form</h3>
 
-        <form onSubmit={handleSubmit} className="form">
+        {submitStatus === 'success' && (
+          <div className="form-status success" data-aos="fade-up">
+            ✓ Message sent successfully! I'll get back to you soon.
+          </div>
+        )}
+        {submitStatus === 'error' && (
+          <div className="form-status error" data-aos="fade-up">
+            ✗ Error sending message. Please try again.
+          </div>
+        )}
+
+        <form 
+          name="contact"
+          onSubmit={handleSubmit} 
+          className="form"
+          netlify
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          
           <div className="input-wrapper">
             <input
               type="text"
@@ -92,12 +137,12 @@ function Contact({ isActive }) {
           <button
             className="form-btn"
             type="submit"
-            disabled={!isValid}
+            disabled={!isValid || isSubmitting}
             data-aos="fade-up"
             data-aos-delay="450"
           >
             <ion-icon name="paper-plane"></ion-icon>
-            <span>Send Message</span>
+            <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
           </button>
         </form>
       </section>

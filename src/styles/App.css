@@ -1009,17 +1009,22 @@ article.active {
 .project-img {
     position: relative;
     width: 100%;
-    height: 220px;
+    height: 220px !important;
     border-radius: 16px 16px 0 0;
     overflow: hidden;
-    margin-bottom: 0;
+    margin: 0;
+    padding: 0;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .project-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
     transition: var(--transition1);
 }
 
@@ -1082,7 +1087,7 @@ article.active {
     color: var(--light-gray70);
     font-size: var(--fs6);
     font-weight: var(--fw300);
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .project-card {
@@ -1121,7 +1126,7 @@ article.active {
     font-weight: var(--fw300);
     line-height: 1.5;
     flex-grow: 1;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .project-description:not(.expanded) {
@@ -1358,6 +1363,48 @@ textarea.form-input::-webkit-realizer {
 
 .form-btn:disabled:hover::before {
     background: var(--bg-gradient-jet);
+}
+
+.form-status {
+    padding: 15px 20px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    font-size: var(--fs6);
+    font-weight: var(--fw500);
+    animation: slideDown .3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-status.success {
+    background: hsl(120, 73%, 75%);
+    color: hsl(120, 60%, 20%);
+    border-left: 4px solid hsl(120, 60%, 40%);
+}
+
+.form-status.error {
+    background: hsl(0, 100%, 80%);
+    color: hsl(0, 100%, 30%);
+    border-left: 4px solid hsl(0, 100%, 50%);
+}
+
+:root[data-theme="light"] .form-status.success {
+    background: hsl(120, 73%, 65%);
+    color: hsl(120, 60%, 5%);
+}
+
+:root[data-theme="light"] .form-status.error {
+    background: hsl(0, 100%, 70%);
+    color: hsl(0, 100%, 15%);
 }
 
 
