@@ -90,14 +90,12 @@ function Portfolio({ isActive }) {
             
             return (
               <li key={index} className="project-item active" data-aos="zoom-in" data-aos-delay={300 + index * 100}>
-                <div className="project-card">
+                <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-card">
                   <figure className="project-img">
-                    <a href={project.link} target="_blank" rel="noopener noreferrer">
-                      <div className="project-item-icon-box">
-                        <ion-icon name="eye-outline"></ion-icon>
-                      </div>
-                      <img src={project.image} alt={project.title} loading="lazy" />
-                    </a>
+                    <div className="project-item-icon-box">
+                      <ion-icon name="eye-outline"></ion-icon>
+                    </div>
+                    <img src={project.image} alt={project.title} loading="lazy" />
                   </figure>
                   
                   <div className="project-content">
@@ -121,7 +119,7 @@ function Portfolio({ isActive }) {
                       </button>
                     )}
                   </div>
-                </div>
+                </a>
               </li>
             )
           })}
