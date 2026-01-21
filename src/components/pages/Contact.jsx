@@ -16,8 +16,11 @@ function Contact({ isActive }) {
     const newFormData = { ...formData, [name]: value }
     setFormData(newFormData)
 
-    // Simple validation
-    const isFormValid = newFormData.fullname && newFormData.email && newFormData.message
+    const isFormValid =
+      newFormData.fullname &&
+      newFormData.email &&
+      newFormData.message
+
     setIsValid(isFormValid)
   }
 
@@ -28,7 +31,9 @@ function Contact({ isActive }) {
     try {
       const response = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
         body: new URLSearchParams({
           'form-name': 'contact',
           fullname: formData.fullname,
@@ -57,6 +62,22 @@ function Contact({ isActive }) {
 
   return (
     <article className={`contact ${isActive ? 'active' : ''}`} data-aos="fade-in">
+      
+      {/* 🔒 Hidden static form for Netlify detection */}
+      <form
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        hidden
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <input type="hidden" name="bot-field" />
+        <input type="text" name="fullname" />
+        <input type="email" name="email" />
+        <textarea name="message"></textarea>
+      </form>
+
       <header data-aos="fade-down">
         <h2 className="h2 article-title">Contact</h2>
       </header>
@@ -81,23 +102,28 @@ function Contact({ isActive }) {
 
         {submitStatus === 'success' && (
           <div className="form-status success" data-aos="fade-up">
-            ✓ Message sent successfully! I'll get back to you soon.
+            ✓ Message sent successfully! I&apos;ll get back to you soon.
           </div>
         )}
+
         {submitStatus === 'error' && (
           <div className="form-status error" data-aos="fade-up">
             ✗ Error sending message. Please try again.
           </div>
         )}
 
-        <form 
+        {/* 👇 Actual user-facing form */}
+        <form
           name="contact"
-          onSubmit={handleSubmit} 
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          onSubmit={handleSubmit}
           className="form"
-          netlify
         >
           <input type="hidden" name="form-name" value="contact" />
-          
+          <input type="hidden" name="bot-field" />
+
           <div className="input-wrapper">
             <input
               type="text"
@@ -110,6 +136,7 @@ function Contact({ isActive }) {
               data-aos="fade-up"
               data-aos-delay="300"
             />
+
             <input
               type="email"
               name="email"
