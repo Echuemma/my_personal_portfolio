@@ -29,17 +29,20 @@ function Contact({ isActive }) {
     setIsSubmitting(true)
 
     try {
+      // Encode the form data
+      const formBody = new URLSearchParams({
+        'form-name': 'contact',
+        'fullname': formData.fullname,
+        'email': formData.email,
+        'message': formData.message
+      }).toString()
+
       const response = await fetch('/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: new URLSearchParams({
-          'form-name': 'contact',
-          fullname: formData.fullname,
-          email: formData.email,
-          message: formData.message
-        }).toString()
+        body: formBody
       })
 
       if (response.ok) {
@@ -66,13 +69,10 @@ function Contact({ isActive }) {
       {/* 🔒 Hidden static form for Netlify detection */}
       <form
         name="contact"
-        method="POST"
-        data-netlify="true"
+        netlify
         netlify-honeypot="bot-field"
         hidden
       >
-        <input type="hidden" name="form-name" value="contact" />
-        <input type="hidden" name="bot-field" />
         <input type="text" name="fullname" />
         <input type="email" name="email" />
         <textarea name="message"></textarea>
@@ -114,16 +114,9 @@ function Contact({ isActive }) {
 
         {/* 👇 Actual user-facing form */}
         <form
-          name="contact"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
           onSubmit={handleSubmit}
           className="form"
         >
-          <input type="hidden" name="form-name" value="contact" />
-          <input type="hidden" name="bot-field" />
-
           <div className="input-wrapper">
             <input
               type="text"

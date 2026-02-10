@@ -1,5 +1,4 @@
 import { useState } from 'react'
-
 function Portfolio({ isActive }) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [expandedProject, setExpandedProject] = useState(null)
