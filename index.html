@@ -8,6 +8,17 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Netlify form (static) for build-time detection -->
+    <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <p style="display:none">
+        <label>Don't fill this out: <input name="bot-field" /></label>
+      </p>
+      <input type="text" name="fullname" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.jsx"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script noModule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

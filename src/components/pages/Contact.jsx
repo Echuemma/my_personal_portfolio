@@ -10,6 +10,7 @@ function Contact({ isActive }) {
   const [isValid, setIsValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -17,47 +18,88 @@ function Contact({ isActive }) {
     setFormData(newFormData)
 
     const isFormValid =
-      newFormData.fullname &&
-      newFormData.email &&
-      newFormData.message
+      newFormData.fullname.trim() &&
+      newFormData.email.trim() &&
+      newFormData.message.trim()
 
     setIsValid(isFormValid)
+  }
+
+  const encode = (data) => {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&')
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setErrorMessage('')
 
+    // Detect environment
+    const isLocalhost = window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1'
+    
+    // For localhost, just simulate success
+    if (isLocalhost) {
+      console.log('🔧 LOCAL DEVELOPMENT MODE')
+      console.log('Form would submit with data:', formData)
+      console.log('✅ Simulating successful submission...')
+      
+      setTimeout(() => {
+        setSubmitStatus('success')
+        setFormData({ fullname: '', email: '', message: '' })
+        setIsValid(false)
+        setIsSubmitting(false)
+        setTimeout(() => setSubmitStatus(null), 5000)
+      }, 1000) // Simulate network delay
+      return
+    }
+
+    // For Netlify deployment
     try {
-      // Encode the form data
-      const formBody = new URLSearchParams({
-        'form-name': 'contact',
-        'fullname': formData.fullname,
-        'email': formData.email,
-        'message': formData.message
-      }).toString()
-
+      console.log('📤 Submitting to Netlify Forms...')
+      
       const response = await fetch('/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+        headers: { 
+          'Content-Type': 'application/x-www-form-urlencoded' 
         },
-        body: formBody
+        body: encode({
+          'form-name': 'contact',
+          ...formData
+        })
       })
 
+      console.log('📥 Response status:', response.status)
+      console.log('📥 Response ok:', response.ok)
+
       if (response.ok) {
+        console.log('✅ Form submitted successfully!')
         setSubmitStatus('success')
         setFormData({ fullname: '', email: '', message: '' })
         setIsValid(false)
         setTimeout(() => setSubmitStatus(null), 5000)
       } else {
+        console.error('❌ Form submission failed:', response.status, response.statusText)
+        const responseText = await response.text()
+        console.error('Response body:', responseText)
+        
         setSubmitStatus('error')
-        setTimeout(() => setSubmitStatus(null), 5000)
+        setErrorMessage(`Error ${response.status}: ${response.statusText}`)
+        setTimeout(() => {
+          setSubmitStatus(null)
+          setErrorMessage('')
+        }, 5000)
       }
     } catch (error) {
-      console.error('Form submission error:', error)
+      console.error('❌ Network error during form submission:', error)
       setSubmitStatus('error')
-      setTimeout(() => setSubmitStatus(null), 5000)
+      setErrorMessage(error.message || 'Network error occurred')
+      setTimeout(() => {
+        setSubmitStatus(null)
+        setErrorMessage('')
+      }, 5000)
     } finally {
       setIsSubmitting(false)
     }
@@ -66,13 +108,21 @@ function Contact({ isActive }) {
   return (
     <article className={`contact ${isActive ? 'active' : ''}`} data-aos="fade-in">
       
-      {/* 🔒 Hidden static form for Netlify detection */}
+      {/* 🔒 Hidden static form for Netlify detection - CRITICAL for Netlify Forms to work */}
       <form
         name="contact"
-        netlify
-        netlify-honeypot="bot-field"
+        data-netlify="true"
+        data-netlify-honeypot="bot-field"
         hidden
+        aria-hidden="true"
       >
+        <input type="hidden" name="form-name" value="contact" />
+        <p style={{ display: 'none' }}>
+          <label>
+            Don't fill this out if you're human: 
+            <input name="bot-field" />
+          </label>
+        </p>
         <input type="text" name="fullname" />
         <input type="email" name="email" />
         <textarea name="message"></textarea>
@@ -108,7 +158,7 @@ function Contact({ isActive }) {
 
         {submitStatus === 'error' && (
           <div className="form-status error" data-aos="fade-up">
-            ✗ Error sending message. Please try again.
+            ✗ Error sending message. {errorMessage && `(${errorMessage})`} Please try again.
           </div>
         )}
 
@@ -116,7 +166,18 @@ function Contact({ isActive }) {
         <form
           onSubmit={handleSubmit}
           className="form"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+          name="contact"
         >
+          {/* Hidden fields required for Netlify */}
+          <input type="hidden" name="form-name" value="contact" />
+          <div style={{ display: 'none' }}>
+            <label>
+              Don't fill this out: <input name="bot-field" />
+            </label>
+          </div>
+
           <div className="input-wrapper">
             <input
               type="text"
