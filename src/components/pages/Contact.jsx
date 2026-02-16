@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import emailjs from '@emailjs/browser'
 
 function Contact({ isActive }) {
   const [formData, setFormData] = useState({
@@ -10,6 +11,11 @@ function Contact({ isActive }) {
   const [isValid, setIsValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
+
+  useEffect(() => {
+    // Initialize EmailJS with Public Key
+    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'default-key')
+  }, [])
   const [errorMessage, setErrorMessage] = useState('')
 
   const handleChange = (e) => {
@@ -25,77 +31,45 @@ function Contact({ isActive }) {
     setIsValid(isFormValid)
   }
 
-  const encode = (data) => {
-    return Object.keys(data)
-      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-      .join('&')
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
     setErrorMessage('')
 
-    // Detect environment
-    const isLocalhost = window.location.hostname === 'localhost' || 
-                       window.location.hostname === '127.0.0.1'
-    
-    // For localhost, just simulate success
-    if (isLocalhost) {
-      console.log('🔧 LOCAL DEVELOPMENT MODE')
-      console.log('Form would submit with data:', formData)
-      console.log('✅ Simulating successful submission...')
-      
-      setTimeout(() => {
-        setSubmitStatus('success')
-        setFormData({ fullname: '', email: '', message: '' })
-        setIsValid(false)
-        setIsSubmitting(false)
-        setTimeout(() => setSubmitStatus(null), 5000)
-      }, 1000) // Simulate network delay
-      return
-    }
-
-    // For Netlify deployment
     try {
-      console.log('📤 Submitting to Netlify Forms...')
-      
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/x-www-form-urlencoded' 
-        },
-        body: encode({
-          'form-name': 'contact',
-          ...formData
-        })
-      })
+      // Send email via EmailJS
+      const templateParams = {
+        to_email: 'echuemmanuel918@gmail.com', // Your email
+        from_name: formData.fullname,
+        from_email: formData.email,
+        message: formData.message
+      }
 
-      console.log('📥 Response status:', response.status)
-      console.log('📥 Response ok:', response.ok)
+      const result = await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID || 'default-service',
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'default-template',
+        templateParams
+      )
 
-      if (response.ok) {
-        console.log('✅ Form submitted successfully!')
+      if (result.status === 200) {
+        console.log('✅ Email sent successfully!')
         setSubmitStatus('success')
         setFormData({ fullname: '', email: '', message: '' })
         setIsValid(false)
         setTimeout(() => setSubmitStatus(null), 5000)
       } else {
-        console.error('❌ Form submission failed:', response.status, response.statusText)
-        const responseText = await response.text()
-        console.error('Response body:', responseText)
-        
+        console.error('❌ Email sending failed')
         setSubmitStatus('error')
-        setErrorMessage(`Error ${response.status}: ${response.statusText}`)
+        setErrorMessage('Failed to send email')
         setTimeout(() => {
           setSubmitStatus(null)
           setErrorMessage('')
         }, 5000)
       }
     } catch (error) {
-      console.error('❌ Network error during form submission:', error)
+      console.error('❌ Email submission error:', error)
       setSubmitStatus('error')
-      setErrorMessage(error.message || 'Network error occurred')
+      setErrorMessage(error.message || 'Failed to send email')
       setTimeout(() => {
         setSubmitStatus(null)
         setErrorMessage('')
