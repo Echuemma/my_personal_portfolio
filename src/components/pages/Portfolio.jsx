@@ -21,7 +21,8 @@ function Portfolio({ isActive }) {
     {
       title: 'Internet Banking Business',
       category: 'applications',
-      image: 'https://i.postimg.cc/jSJVqYsq/project-3.jpg',
+      image: '/images/business.png',
+      // image: 'https://i.postimg.cc/jSJVqYsq/project-3.jpg',
       link: 'https://internetbankingbusiness.bankofagriculture.com/',
       description: 'Enterprise-level banking solution tailored for business clients. Includes multi-account management, bulk transaction processing, advanced reporting tools, and role-based access control for team collaboration.'
     },
