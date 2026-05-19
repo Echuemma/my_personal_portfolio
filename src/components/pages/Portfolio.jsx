@@ -5,7 +5,7 @@ function Portfolio({ isActive }) {
 
   const projects = [
     {
-      title: 'Internet Banking',
+      title: 'Bank of Agriculture',
       category: 'applications',
       image: '/images/Screenshot 2026-01-19 152709.png',
       link: 'https://boanig.com/',
@@ -15,23 +15,23 @@ function Portfolio({ isActive }) {
       title: 'Internet Banking Personal',
       category: 'applications',
       image: '/images/personal.png',
-      link: '#',
+      link: 'https://internetbanking.bankofagriculture.com/',
       description: 'Personal banking interface designed for individual customers. Provides easy access to account information, balance inquiries, transaction history, and personalized financial insights with an intuitive user experience.'
     },
     {
       title: 'Internet Banking Business',
       category: 'applications',
       image: 'https://i.postimg.cc/jSJVqYsq/project-3.jpg',
-      link: '#',
+      link: 'https://internetbankingbusiness.bankofagriculture.com/',
       description: 'Enterprise-level banking solution tailored for business clients. Includes multi-account management, bulk transaction processing, advanced reporting tools, and role-based access control for team collaboration.'
     },
-    {
-      title: 'Internet Banking Admin',
-      category: 'applications',
-      image: 'https://i.postimg.cc/dtpXxNGb/project-4.png',
-      link: '#',
-      description: 'Administrative dashboard for banking operations management. Enables monitoring of user accounts, transaction oversight, system performance analytics, and configuration management with secure authentication.'
-    },
+    // {
+    //   title: 'Internet Banking Admin',
+    //   category: 'applications',
+    //   image: 'https://i.postimg.cc/dtpXxNGb/project-4.png',
+    //   link: '#',
+    //   description: 'Administrative dashboard for banking operations management. Enables monitoring of user accounts, transaction oversight, system performance analytics, and configuration management with secure authentication.'
+    // },
     {
       title: 'Samloriden Engineering',
       category: 'web development',

@@ -47,7 +47,7 @@ function Sidebar({ isOpen, onToggle }) {
             </div>
           </li>
 
-          <li className="contact-item" data-aos="fade-up" data-aos-delay="400">
+          {/* <li className="contact-item" data-aos="fade-up" data-aos-delay="400">
             <div className="icon-box">
               <ion-icon name="calendar-outline"></ion-icon>
             </div>
@@ -55,7 +55,7 @@ function Sidebar({ isOpen, onToggle }) {
               <p className="contact-title">Birthday</p>
               <time dateTime="1982-06-23">June 21</time>
             </div>
-          </li>
+          </li> */}
 
           <li className="contact-item" data-aos="fade-up" data-aos-delay="450">
             <div className="icon-box">

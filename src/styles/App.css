@@ -886,6 +886,33 @@ article.active {
     margin-bottom: 15px;
 }
 
+.skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--light-gray);
+    font-size: var(--fs8);
+}
+
+.skill-tag ion-icon {
+    font-size: 18px;
+    color: currentColor;
+}
+
+.skill-tag:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 .skill .title-wrapper {
     display: flex;
     align-items: center;

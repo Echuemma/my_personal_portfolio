@@ -13,8 +13,13 @@ function Contact({ isActive }) {
   const [submitStatus, setSubmitStatus] = useState(null)
 
   useEffect(() => {
-    // Initialize EmailJS with Public Key
-    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'default-key')
+    // Initialize EmailJS with Public Key (only if provided)
+    const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    if (PUBLIC_KEY) {
+      emailjs.init(PUBLIC_KEY)
+    } else {
+      console.warn('Missing VITE_EMAILJS_PUBLIC_KEY in environment')
+    }
   }, [])
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -37,18 +42,25 @@ function Contact({ isActive }) {
     setErrorMessage('')
 
     try {
-      // Send email via EmailJS
+      // Send email via EmailJS — match the template variables: {{name}}, {{time}}, {{message}}
       const templateParams = {
-        to_email: 'echuemmanuel918@gmail.com', // Your email
-        from_name: formData.fullname,
-        from_email: formData.email,
+        name: formData.fullname,
+        time: new Date().toLocaleString(),
         message: formData.message
       }
 
+      const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
+      const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+      const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+
+      console.debug('EmailJS config:', { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY: !!PUBLIC_KEY })
+      console.debug('EmailJS payload:', templateParams)
+
       const result = await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID || 'default-service',
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'default-template',
-        templateParams
+        SERVICE_ID,
+        TEMPLATE_ID,
+        templateParams,
+        PUBLIC_KEY
       )
 
       if (result.status === 200) {

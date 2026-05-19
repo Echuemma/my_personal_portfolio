@@ -3,7 +3,7 @@ function Resume({ isActive }) {
     {
       title: 'Federal University of Agriculture, Makurdi',
       period: '2016 – 2021',
-      description: "Bachelor's degree in Forestry and Wildlife Management. Developed strong analytical, research, and problem-solving skills, with experience in data handling, field analysis, and structured reporting—skills that now support my transition into software development."
+      description: "Bachelor's degree in Applied Sciences. Built strong foundations in data analysis, structured research, and systematic problem-solving through field studies and quantitative reporting — skills that directly inform my approach to software development."
     },
     {
       title: 'Rework Academy',
@@ -35,14 +35,44 @@ function Resume({ isActive }) {
     }
   ]
 
-  const skills = [
-    { name: 'HTML, CSS & JavaScript', percentage: 90 },
-    { name: 'TypeScript', percentage: 80 },
-    { name: 'React.js', percentage: 85 },
-    { name: 'UI Styling (Tailwind, Bootstrap, Material UI)', percentage: 85 },
-    { name: 'Version Control (Git & GitHub)', percentage: 80 },
-    { name: 'API Testing & Integration (Postman, Apidog)', percentage: 70 }
-  ]
+const skills = [
+  {
+    category: 'Languages & Core',
+    items: ['HTML5', 'CSS3', 'JavaScript (ES6+)', 'TypeScript']
+  },
+  {
+    category: 'Frameworks & Libraries',
+    items: ['React.js', 'Next.js', 'Tailwind CSS', 'Material UI', 'Bootstrap']
+  },
+  {
+    category: 'State Management',
+    items: ['Redux', 'Zustand', 'Context API']
+  },
+  {
+    category: 'Tools & Workflow',
+    items: ['Git', 'GitHub', 'Postman', 'Apidog', 'REST APIs']
+  }
+]
+
+  const skillIcons = {
+    'HTML5': 'logo-html5',
+    'CSS3': 'logo-css3',
+    'JavaScript (ES6+)': 'logo-javascript',
+    'TypeScript': 'code-slash-outline',
+    'React.js': 'logo-react',
+    'Next.js': 'cube-outline',
+    'Tailwind CSS': 'color-palette-outline',
+    'Material UI': 'apps-outline',
+    'Bootstrap': 'layers-outline',
+    'Redux': 'git-branch-outline',
+    'Zustand': 'sync-outline',
+    'Context API': 'people-outline',
+    'Git': 'logo-github',
+    'GitHub': 'logo-github',
+    'Postman': 'paper-plane-outline',
+    'Apidog': 'bug-outline',
+    'REST APIs': 'server-outline'
+  }
 
   const Timeline = ({ items, title, icon }) => (
     <section className="timeline" data-aos="fade-up" data-aos-delay="200">
@@ -82,17 +112,16 @@ function Resume({ isActive }) {
         <h3 className="h3 skills-title">My Skills</h3>
 
         <ul className="skills-list content-card">
-          {skills.map((skill, index) => (
-            <li key={index} className="skills-item" data-aos="fade-up" data-aos-delay={500 + index * 75}>
-              <div className="title-wrapper">
-                <h5 className="h5">{skill.name}</h5>
-                <data value={skill.percentage}>{skill.percentage}%</data>
-              </div>
-              <div className="skills-progress-bg">
-                <div 
-                  className="skills-progress-fill" 
-                  style={{ width: `${skill.percentage}%` }}
-                ></div>
+          {skills.map((group, index) => (
+            <li key={index} className="skills-item">
+              <h5 className="h5">{group.category}</h5>
+                  <div className="skills-tags">
+                {group.items.map((item, i) => (
+                  <span key={i} className="skill-tag">
+                    <ion-icon name={skillIcons[item] || 'ellipse-outline'}></ion-icon>
+                    {item}
+                  </span>
+                ))}
               </div>
             </li>
           ))}
